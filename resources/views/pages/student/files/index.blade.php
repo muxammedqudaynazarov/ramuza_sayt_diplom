@@ -5,42 +5,66 @@
         <div class="col-12 mb-4">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('files.store') }}" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <h4>
-                            Resurs kiritiw
-                        </h4>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="topic" name="topic" placeholder="">
-                            <label for="topic">Teması</label>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="formFile" class="form-label m-0">Resurs fayl</label>
-                            <input class="form-control form-control-lg" type="file" id="formFile" name="formFile">
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-7 mb-3">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="teacher" name="teacher"
-                                           placeholder="">
-                                    <label for="teacher">Qabıllawshı F.A.Áa.</label>
-                                </div>
-                            </div>
-                            <div class="col-md-5 mb-3">
-                                <input class="form-control form-control-lg" type="date" value="{{ date('Y-m-d') }}"
-                                       id="html5-date-input" name="date">
-                            </div>
-                        </div>
-
-                        <div style="text-align: right">
-                            <button class="btn btn-success" type="submit">
-                                <i class="bx bx-check"></i> Jiberiw
-                            </button>
-                            <a href="{{ route('dash') }}" class="btn btn-primary">Biykarlaw</a>
-                        </div>
-                    </form>
+                    <h4>
+                        @if($status == 's')
+                            Jibergen fayllarım
+                        @elseif($status == 'a')
+                            Qabıllangan fayllarım
+                        @elseif($status == 'd')
+                            Biykar etilgen fayllarım
+                        @endif
+                    </h4>
+                    <div class="table-responsive">
+                        <table class="table table-hover text-center">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Resurs ataması</th>
+                                <th>Qosımsha maǵlıwmatlar</th>
+                                <th>Resurs</th>
+                                <th>Júklengen waqtı</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @if(count($files))
+                                @foreach($files as $file)
+                                    <tr>
+                                        <td>#{{ $file->id }}</td>
+                                        <td>{{ $file->topic }}</td>
+                                        <td style="text-align: left">
+                                            <div class="small">
+                                                <div>
+                                                    Qabıllawshınıń
+                                                    F.A.Áa.: {{ json_decode($file->information)->teacher }}
+                                                </div>
+                                                <div>
+                                                    Qabıllaw sánesi: {{ json_decode($file->information)->date }}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a href="{{ asset('/storage/' . $file->url) }}"
+                                               class="btn btn-outline-primary btn-sm">
+                                                <i class="bx bx-link"></i>
+                                                Resurs
+                                            </a>
+                                        </td>
+                                        <td>
+                                            {{ date('d.m.Y H:i:s', strtotime($file->created_at)) }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td class="text-danger small" colspan="5">
+                                        Házirshe hesh qanday fayl qosılmaǵan!
+                                    </td>
+                                </tr>
+                            @endif
+                            </tbody>
+                        </table>
+                    </div>
+                    {{ $files->links() }}
                 </div>
             </div>
         </div>

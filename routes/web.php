@@ -1,22 +1,25 @@
 <?php
 
+use App\Http\Controllers\ArchiveController;
+use App\Http\Controllers\FileController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\IndexController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/dashboard');
 });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', function () {
+    return redirect('/dashboard');
+})->name('home');
+
+Route::prefix('dashboard')->middleware(['auth'])->group(function () {
+    Route::resource('/', IndexController::class)->name('index', 'dash');
+    Route::resource('files', FileController::class);
+    Route::resource('archive', ArchiveController::class);
+    Route::get('/antiplag', [ArchiveController::class, 'antiplag']);
+});

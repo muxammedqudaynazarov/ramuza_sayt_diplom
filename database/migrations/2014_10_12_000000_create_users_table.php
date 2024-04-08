@@ -14,9 +14,15 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('username')->unique();
+            $table->string('email')->unique();
             $table->string('password');
-            $table->string('current_role')->default('user');
-            $table->json('roles_list')->default(json_encode(['user']));
+            $table->string('current_role')->default('student');
+            $table->json('roles_list')->default(json_encode(['student']));
+            $table->string('faculty_id')->nullable();
+            $table->string('speciality_id')->nullable();
+            $table->string('group_id')->nullable();
+            $table->string('course_id')->nullable();
+            $table->string('phone')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

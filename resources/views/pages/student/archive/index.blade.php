@@ -6,52 +6,44 @@
             <div class="card">
                 <div class="card-body">
                     <h4>
-                        @if($status == 's')
-                            Jibergen fayllarım
-                        @elseif($status == 'a')
-                            Qabillangan fayllarım
-                        @elseif($status == 'd')
-                            Biykar etilgen fayllarım
-                        @endif
+                        Resurslar arxivi
                     </h4>
+                    <div class="my-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="search" placeholder=""
+                                   aria-describedby="floatingInputHelp">
+                            <label for="search">Resurs ataması</label>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-hover text-center">
                             <thead>
                             <tr>
                                 <th>#</th>
                                 <th>Resurs ataması</th>
-                                <th>Qosımsha maǵlıwmatlar</th>
-                                <th>Resurs</th>
                                 <th>Júklengen waqtı</th>
+                                <th>Statusı</th>
                             </tr>
                             </thead>
                             <tbody>
                             @if(count($files))
                                 @foreach($files as $file)
                                     <tr>
-                                        <td>{{ $file->id }}</td>
+                                        <td>#{{ $file->id }}</td>
                                         <td>{{ $file->topic }}</td>
-                                        <td style="text-align: left">
-                                            <div class="small">
-                                                <div>
-                                                    Qabıllawshınıń
-                                                    F.A.Áa.: {{ json_decode($file->information)->teacher }}
-                                                </div>
-                                                <div>
-                                                    Qabıllaw sánesi: {{ json_decode($file->information)->date }}
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <a href="{{ asset('/storage/' . $file->url) }}"
-                                               class="btn btn-outline-primary btn-sm">
-                                                <i class="bx bx-link"></i>
-                                                Resurs
-                                            </a>
-                                        </td>
                                         <td>
                                             {{ date('d.m.Y H:i:s', strtotime($file->created_at)) }}
                                         </td>
+                                        <td>
+                                            @if($file->status == 's')
+                                                <div class="badge bg-primary">Jiberilgen</div>
+                                            @elseif($file->status == 'a')
+                                                <div class="badge bg-success">Qabıllanǵan</div>
+                                            @elseif($file->status == 'd')
+                                                <div class="badge bg-dark">Biykar etilgen</div>
+                                            @endif
+                                        </td>
+
                                     </tr>
                                 @endforeach
                             @else
